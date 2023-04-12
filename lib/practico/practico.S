@@ -59,7 +59,28 @@ endfun suma
 defun sumatoria
     push {r4-r11,lr}
     // Insertar código a continuación
+    MOV R2, #0 // parte baja
+    MOV R3, #0 // parte alta
+    MOV R4, #0 // inicio de índice
+    
+    bucle: CMP R0, R4
+    BEQ Salida
+    LDR R5, [R1,R4,lsl #2] //
+    ADDS R2, R5 //R2=R2+R5 Y BANDERA C
+    MOV R6,#0//
+    ADC R3, R6,R3 //R3=R3+C
+    ADD R4, #1 //R4=R4+1
+    BAL bucle
 
+  /*  negativo: SUBS R2,R5 //R2=R2-R5
+    SBC R3, R3 //
+    ADD R4, #1 //R4=R4+1
+    BAL bucle
+*/
+    Salida: MOV R1,R3 //R1=R3
+    MOV R0,R2 //R0=R2
+
+    
     // Retorno, antes R1:R0 debe tener el valor correcto
     pop {r4-r11,pc}
 endfun sumatoria
