@@ -64,20 +64,23 @@ defun sumatoria
     MOV R4, #0 // inicio de índice
     
     bucle: CMP R0, R4
-    BEQ Salida
+    BEQ Retorno
     LDR R5, [R1,R4,lsl #2] //
+    CMP R5,#0
+    BLT negativo
     ADDS R2, R5 //R2=R2+R5 Y BANDERA C
-    MOV R6,#0//
-    ADC R3, R6,R3 //R3=R3+C
+    MOV R6,0X00000000//
+    ADC R3, R3,R6 //R3=R3+R6+C
     ADD R4, #1 //R4=R4+1
     BAL bucle
 
-  /*  negativo: SUBS R2,R5 //R2=R2-R5
-    SBC R3, R3 //
+    negativo: ADDS R2, R5 //R2=R2+R5 Y BANDERA C
+    MOV R6, 0XFFFFFFFF//
+    ADC R3, R3,R6 //R3=R3+R6+C
     ADD R4, #1 //R4=R4+1
     BAL bucle
-*/
-    Salida: MOV R1,R3 //R1=R3
+
+    Retorno: MOV R1,R3 //R1=R3
     MOV R0,R2 //R0=R2
 
     
