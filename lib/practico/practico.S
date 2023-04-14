@@ -63,8 +63,8 @@ defun sumatoria
     MOV R3, #0 // parte alta
     MOV R4, #0 // inicio de índice
     
-    bucle: CMP R0, R4 // bandera, R0-R4
-    BEQ Retorno // salta a retorno si R0=R4 (osea si la bandera Z modif por cmp es igual a 1)
+    bucle: CMP R4, R0 // bandera, R4-R0
+    BGE Retorno // salta a retorno si R4>=R0 con signo 
     LDR R5, [R1,R4,lsl #2] //esto sucede si R4<R0 EN R5 guardo el elemento de R1 en la posicion R4 ej si quiero sacar de R1 el valor 3(osea R5=3) R4debe ser 2
     CMP R5,#0 //bandera R5-0
     BLT negativo //R5<0
@@ -114,12 +114,12 @@ defun posicion_maximo
     LDR R5,[R1,R4,LSL #2] 
     CMP R3,R5
     BLT menor // si R3<R5 salta a menor
-    IncrementarR4: ADD R4, #1
+    Incrementar_R4: ADD R4, #1
     BAL Bucle
     menor:
     MOV R3, R5
     MOV R2, R4
-    BAL IncrementarR4
+    BAL Incrementar_R4
 
     Retornar: MOV R0, R2
 
@@ -148,6 +148,22 @@ endfun posicion_maximo
 defun ordenar_en_sitio_menor_a_mayor
     push {r4-r11,lr}
     // Insertar código a continuación
+    MOV R8,R0 //guardo R0 en R8
+    MOV R9,R1 //guardo R1 en R9 
+    SUB R4,R8, #1 //R4 = R8-1
+    START: //etiqueta
+    CMP R4,#0 //bandera, R4-0
+    BLE THE_END //si R4 es menor o iugal(con signo) que 0, salta 
+    ADD R0,R4,#1 //R0 = R4 + 1
+    MOV R1,R9 //R1 = R9
+    BL posicion_maximo //llamada a la funcion posicion maximo
+    LDR R1,[R9,R4,LSL #2] //carga en R1 la posición de memoria b[k]
+    LDR R7,[R9,R0,LSL #2] //carga en R7 la posición de memoria b[j]
+    STR R7,[R9,R4,LSL #2] //guarda en R7 la posición de memoria b[k]
+    STR R1,[R9,R0,LSL #2] //guarda en R1 la posición de memoria b[j]
+    SUB R4,#1 //decremento de R4
+    B START //llamado a la etiqueta start sin condición
+    THE_END: 
 
     // Retorno
     pop {r4-r11,pc}
