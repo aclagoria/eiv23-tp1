@@ -63,19 +63,19 @@ defun sumatoria
     MOV R3, #0 // parte alta
     MOV R4, #0 // inicio de índice
     
-    bucle: CMP R0, R4
-    BEQ Retorno
-    LDR R5, [R1,R4,lsl #2] //
-    CMP R5,#0
-    BLT negativo
+    bucle: CMP R0, R4 // bandera, R0-R4
+    BEQ Retorno // salta a retorno si R0=R4 (osea si la bandera Z modif por cmp es igual a 1)
+    LDR R5, [R1,R4,lsl #2] //esto sucede si R4<R0 EN R5 guardo el elemento de R1 en la posicion R4 ej si quiero sacar de R1 el valor 3(osea R5=3) R4debe ser 2
+    CMP R5,#0 //bandera R5-0
+    BLT negativo //R5<0
     ADDS R2, R5 //R2=R2+R5 Y BANDERA C
-    MOV R6,0X00000000//
+    MOV R6,0X00000000 //extension de signo de un numero positivo /* R3:R2=R3:R2+R6:R5 */
     ADC R3, R3,R6 //R3=R3+R6+C
     ADD R4, #1 //R4=R4+1
-    BAL bucle
+    BAL bucle // saltar siempre a bucle
 
     negativo: ADDS R2, R5 //R2=R2+R5 Y BANDERA C
-    MOV R6, 0XFFFFFFFF//
+    MOV R6, 0XFFFFFFFF// EXTENSION DE SIGNO DE NUMERO NEGATIVO
     ADC R3, R3,R6 //R3=R3+R6+C
     ADD R4, #1 //R4=R4+1
     BAL bucle
@@ -104,6 +104,25 @@ endfun sumatoria
 defun posicion_maximo
     push {r4-r11,lr}
     // Insertar código a continuación
+    MOV R2, #0 //primer índice
+    CMP R0, #1 //bandera R0-1 
+    BLE Retornar // salta a retornar si R0 es menor o igual a 1 (con signo)
+    LDR R3, [R1,R2,LSL #2] // en R3 guardo el elemento de R1 en la posicion R2 ej si quiero sacar de R1 el valor 3(osea R3=3) R2 debe ser 3
+    MOV R4, #1 //segundo índice
+    Bucle: CMP R4, R0 // bandera, R4-R0
+    BEQ Retornar // si R0=R4 salta a retornar
+    LDR R5,[R1,R4,LSL #2] 
+    CMP R3,R5
+    BLT menor // si R3<R5 salta a menor
+    IncrementarR4: ADD R4, #1
+    BAL Bucle
+    menor:
+    MOV R3, R5
+    MOV R2, R4
+    BAL IncrementarR4
+
+    Retornar: MOV R0, R2
+
 
     // Retorno, antes R0 debe tener el valor correcto
     pop {r4-r11,pc}
