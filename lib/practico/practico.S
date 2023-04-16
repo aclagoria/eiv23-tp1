@@ -65,7 +65,7 @@ defun sumatoria
     
     bucle: CMP R4, R0 // bandera, R4-R0
     BGE Retorno // salta a retorno si R4>=R0 con signo 
-    LDR R5, [R1,R4,lsl #2] //esto sucede si R4<R0 EN R5 guardo el elemento de R1 en la posicion R4 ej si quiero sacar de R1 el valor 3(osea R5=3) R4debe ser 2
+    LDR R5, [R1,R4,lsl #2] //esto sucede si R4<R0, EN R5 guardo el elemento de R1 en la posicion R4, ej: si quiero sacar de R1 el valor 3 (osea R5=3) R4 debe ser 2
     CMP R5,#0 //bandera R5-0
     BLT negativo //R5<0
     ADDS R2, R5 //R2=R2+R5 Y BANDERA C
@@ -107,11 +107,11 @@ defun posicion_maximo
     MOV R2, #0 //primer índice
     CMP R0, #1 //bandera R0-1 
     BLE Retornar // salta a retornar si R0 es menor o igual a 1 (con signo)
-    LDR R3, [R1,R2,LSL #2] // en R3 guardo el elemento de R1 en la posicion R2 ej si quiero sacar de R1 el valor 3(osea R3=3) R2 debe ser 3
+    LDR R3, [R1,R2,LSL #2] // en R3 guardo el elemento de R1 en la posicion R2, ej: si quiero sacar de R1 el valor 3 (osea R3=3) R2 debe ser 3
     MOV R4, #1 //segundo índice
     Bucle: CMP R4, R0 // bandera, R4-R0
     BEQ Retornar // si R0=R4 salta a retornar
-    LDR R5,[R1,R4,LSL #2] 
+    LDR R5,[R1,R4,LSL #2] // en R5 guardo el elemento de R1 en la posicion R4
     CMP R3,R5
     BLT menor // si R3<R5 salta a menor
     Incrementar_R4: ADD R4, #1
@@ -153,7 +153,7 @@ defun ordenar_en_sitio_menor_a_mayor
     SUB R4,R8, #1 //R4 = R8-1
     START: //etiqueta
     CMP R4,#0 //bandera, R4-0
-    BLE THE_END //si R4 es menor o iugal(con signo) que 0, salta 
+    BLE THE_END //si R4 es menor o iugal (con signo) que 0, salta 
     ADD R0,R4,#1 //R0 = R4 + 1
     MOV R1,R9 //R1 = R9
     BL posicion_maximo //llamada a la funcion posicion maximo
